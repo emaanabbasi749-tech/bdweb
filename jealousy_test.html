@@ -1,0 +1,372 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Jealousy Test</title>
+  <style>
+    /* Background gradient animation */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(-45deg, #ff6b6b, #f1948a, #f9c74f, #43aa8b, #577590);
+      background-size: 300% 300%;
+      animation: gradientBG 15s ease infinite;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* Container */
+    .container {
+      background: rgba(255, 255, 255, 0.95);
+      padding: 30px 40px;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+      max-width: 600px;
+      width: 90%;
+      z-index: 10;
+      position: relative;
+    }
+
+    h1 {
+      text-align: center;
+      color: #c0392b;
+      margin-bottom: 20px;
+    }
+
+    /* Progress bar */
+    .progress-container {
+      width: 100%;
+      height: 12px;
+      background: #eee;
+      border-radius: 6px;
+      margin: 20px 0;
+    }
+
+    .progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, #e74c3c, #f1c40f);
+      width: 0%;
+      transition: width 0.4s ease;
+      border-radius: 6px;
+    }
+
+    /* Questions */
+    .question {
+      display: none;
+    }
+
+    .question.active {
+      display: block;
+    }
+
+    .question p {
+      font-weight: bold;
+      margin-bottom: 12px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 10px;
+      cursor: pointer;
+    }
+
+    /* Buttons */
+    .buttons {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 20px;
+    }
+
+    button {
+      padding: 10px 20px;
+      font-weight: bold;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      background-color: #c0392b;
+      color: white;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover:not(:disabled) {
+      background-color: #e74c3c;
+    }
+
+    button:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
+
+    /* Result screen */
+    .result-screen {
+      display: none;
+      text-align: center;
+    }
+
+    .result-screen h2 {
+      color: #2c3e50;
+      margin-bottom: 15px;
+    }
+
+    .result-screen p {
+      font-size: 18px;
+      line-height: 1.5;
+      margin-top: 10px;
+      white-space: pre-line;
+    }
+
+    /* Responsive */
+    @media (max-width: 500px) {
+      .buttons {
+        flex-direction: column;
+        gap: 10px;
+      }
+    }
+
+    /* Heart styles */
+    .heart {
+      position: fixed;
+      width: 15px;
+      height: 15px;
+      background-color: red;
+      transform: rotate(45deg);
+      animation: float 10s linear infinite;
+      opacity: 0.7;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .heart::before,
+    .heart::after {
+      content: '';
+      position: absolute;
+      width: 15px;
+      height: 15px;
+      background-color: red;
+      border-radius: 50%;
+    }
+
+    .heart::before {
+      top: -7.5px;
+      left: 0;
+    }
+
+    .heart::after {
+      left: -7.5px;
+      top: 0;
+    }
+
+    @keyframes float {
+      0% {
+        transform: translateY(100vh) scale(0.5) rotate(45deg);
+        opacity: 0;
+      }
+      50% {
+        opacity: 0.8;
+      }
+      100% {
+        transform: translateY(-10vh) scale(1.2) rotate(45deg);
+        opacity: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container" role="main" aria-label="Jealousy Test Quiz">
+    <h1>Jealousy & Possessiveness Test</h1>
+
+    <div class="progress-container" aria-hidden="true">
+      <div class="progress-bar" id="progress-bar"></div>
+    </div>
+
+    <form id="quiz-form">
+      <div class="question active" data-index="0">
+        <p>1. How would you feel if someone tries to get closer to me than you?</p>
+        <label><input type="radio" name="q0" value="2" required> Angry and jealous</label>
+        <label><input type="radio" name="q0" value="1"> Slightly uncomfortable</label>
+        <label><input type="radio" name="q0" value="0"> I wouldn’t mind</label>
+      </div>
+
+      <div class="question" data-index="1">
+        <p>2. If I post a story with someone else, what would be your reaction?</p>
+        <label><input type="radio" name="q1" value="2" required> Feel betrayed</label>
+        <label><input type="radio" name="q1" value="1"> Feel a bit ignored</label>
+        <label><input type="radio" name="q1" value="0"> Feel happy for you</label>
+      </div>
+
+      <div class="question" data-index="2">
+        <p>3. How would you react if I spent a day with someone else?</p>
+        <label><input type="radio" name="q2" value="2" required> I’d be really upset</label>
+        <label><input type="radio" name="q2" value="1"> I’d ask about it</label>
+        <label><input type="radio" name="q2" value="0"> No problem at all</label>
+      </div>
+
+      <div class="question" data-index="3">
+        <p>4. If I shared secrets with someone else, would you feel hurt?</p>
+        <label><input type="radio" name="q3" value="2" required> Very hurt</label>
+        <label><input type="radio" name="q3" value="1"> A little</label>
+        <label><input type="radio" name="q3" value="0"> Not really</label>
+      </div>
+
+      <div class="question" data-index="4">
+        <p>5. What if I laugh more with someone else than with you?</p>
+        <label><input type="radio" name="q4" value="2" required> I’d feel jealous</label>
+        <label><input type="radio" name="q4" value="1"> Maybe a bit</label>
+        <label><input type="radio" name="q4" value="0"> It’s fine</label>
+      </div>
+
+      <div class="question" data-index="5">
+        <p>6. Would you mind if I shared old memories with someone else?</p>
+        <label><input type="radio" name="q5" value="2" required> Totally unacceptable</label>
+        <label><input type="radio" name="q5" value="1"> Slightly awkward</label>
+        <label><input type="radio" name="q5" value="0"> I’m okay with it</label>
+      </div>
+
+      <div class="question" data-index="6">
+        <p>7. If I compliment someone more than you, how would you feel?</p>
+        <label><input type="radio" name="q6" value="2" required> Hurt and jealous</label>
+        <label><input type="radio" name="q6" value="1"> A little down</label>
+        <label><input type="radio" name="q6" value="0"> Doesn’t matter</label>
+      </div>
+
+      <div class="question" data-index="7">
+        <p>8. How would you feel if I didn't reply quickly to your messages?</p>
+        <label><input type="radio" name="q7" value="2" required> Angry and suspicious</label>
+        <label><input type="radio" name="q7" value="1"> A bit sad</label>
+        <label><input type="radio" name="q7" value="0"> I understand</label>
+      </div>
+
+      <div class="question" data-index="8">
+        <p>9. What if I call someone else my favorite person?</p>
+        <label><input type="radio" name="q8" value="2" required> That would break me</label>
+        <label><input type="radio" name="q8" value="1"> It would sting</label>
+        <label><input type="radio" name="q8" value="0"> I’d be fine</label>
+      </div>
+
+      <div class="question" data-index="9">
+        <p>10. How would you feel if I make plans without you?</p>
+        <label><input type="radio" name="q9" value="2" required> Very upset</label>
+        <label><input type="radio" name="q9" value="1"> Maybe a little ignored</label>
+        <label><input type="radio" name="q9" value="0"> It's okay sometimes</label>
+      </div>
+
+      <div class="buttons">
+        <button type="button" id="prev-btn" disabled aria-label="Previous question">Previous</button>
+        <button type="button" id="next-btn" aria-label="Next question">Next</button>
+      </div>
+    </form>
+
+    <!-- Result Screen -->
+    <div class="result-screen" id="result-screen" role="region" aria-live="polite">
+      <h2>Your Jealousy Score</h2>
+      <p id="score-text"></p>
+      <button onclick="restartQuiz()" aria-label="Retake the quiz">Take Again</button>
+    </div>
+  </div>
+
+  <script>
+    const questions = document.querySelectorAll('.question');
+    const progressBar = document.getElementById('progress-bar');
+    const prevBtn = document.getElementById('prev-btn');
+    const nextBtn = document.getElementById('next-btn');
+    const resultScreen = document.getElementById('result-screen');
+    const scoreText = document.getElementById('score-text');
+    let index = 0;
+
+    // Check for saved result in localStorage
+    const savedScore = localStorage.getItem('jealousyScore');
+    const savedResult = localStorage.getItem('jealousyResult');
+    if (savedScore && savedResult) {
+      document.getElementById('quiz-form').style.display = 'none';
+      resultScreen.style.display = 'block';
+      scoreText.innerHTML = `<strong>Score:</strong> ${savedScore} / 20<br><br>${savedResult}`;
+    }
+
+    function updateView() {
+      questions.forEach((q, i) => {
+        q.classList.toggle('active', i === index);
+      });
+      progressBar.style.width = ((index) / questions.length) * 100 + '%';
+      prevBtn.disabled = index === 0;
+      nextBtn.textContent = index === questions.length - 1 ? 'Submit' : 'Next';
+    }
+
+    nextBtn.onclick = () => {
+      const currentQuestion = questions[index];
+      const answered = currentQuestion.querySelector('input[type="radio"]:checked');
+      if (!answered) {
+        alert("Please select an option before continuing.");
+        return;
+      }
+
+      if (index < questions.length - 1) {
+        index++;
+        updateView();
+      } else {
+        // Calculate score
+        let score = 0;
+        document.querySelectorAll('input[type="radio"]:checked').forEach(input => {
+          score += parseInt(input.value);
+        });
+
+        // Determine category
+        let result = "";
+        if (score <= 6) {
+          result = "😇 You have Low Possessiveness.\nYou're chill and trust deeply. Nothing bothers you easily.";
+        } else if (score <= 13) {
+          result = "😌 You have Moderate Possessiveness.\nYou care and get affected sometimes, but manage feelings well.";
+        } else {
+          result = "🔥 You have High Possessiveness.\nYou're very attached and protective — sometimes to the extreme!";
+        }
+
+        // Save to localStorage
+        localStorage.setItem('jealousyScore', score);
+        localStorage.setItem('jealousyResult', result);
+
+        // Show result
+        document.getElementById('quiz-form').style.display = 'none';
+        resultScreen.style.display = 'block';
+        scoreText.innerHTML = `<strong>Score:</strong> ${score} / 20<br><br>${result.replace(/\n/g, "<br>")}`;
+      }
+    };
+
+    prevBtn.onclick = () => {
+      if (index > 0) {
+        index--;
+        updateView();
+      }
+    };
+
+    function restartQuiz() {
+      localStorage.removeItem('jealousyScore');
+      localStorage.removeItem('jealousyResult');
+      location.reload();
+    }
+
+    updateView();
+
+    // Heart animation
+    function createHeart() {
+      const heart = document.createElement('div');
+      heart.classList.add('heart');
+      heart.style.left = Math.random() * 100 + "vw";
+      heart.style.animationDuration = (5 + Math.random() * 5) + "s";
+      document.body.appendChild(heart);
+      setTimeout(() => heart.remove(), 10000);
+    }
+    setInterval(createHeart, 500);
+  </script>
+</body>
+</html>
